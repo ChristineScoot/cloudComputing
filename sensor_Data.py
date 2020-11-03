@@ -19,14 +19,15 @@ class DatabaseManager():
         # self.conn.commit()
         # self.cur = self.conn.cursor()
 
-    def add_del_update_db_record(self, args=(), name=""):
+    def add_del_update_db_record(self, args=[], name=""):
         col = self.db.data
-        col.insert(
-            {
-                'value': args,
-                'name': name,
-            }
-        )
+        for i in args:
+            col.insert(
+                {
+                    'value': i,
+                    'name': name,
+                }
+            )
         # self.cur.execute(sql_query, args)
         # self.conn.commit()
         return
@@ -40,6 +41,7 @@ class DatabaseManager():
 # Functions to push Sensor Data into Database
 
 # Function to save Temperature to DB Table
+allTemperatures = []
 def DHT22_Temp_Data_Handler(jsonData):
     # Parse Data
     # FIXME chyba nie dziala-------------------------------------
@@ -51,13 +53,15 @@ def DHT22_Temp_Data_Handler(jsonData):
 
     # Push into DB Table
     dbObj = DatabaseManager()
-    dbObj.add_del_update_db_record(
-        [SensorID, Data_and_Time, Temperature], "Temperature")
-    del dbObj
-    print("Inserted Temperature Data into Database.")
-    print("")
+    allTemperatures.append([SensorID, Data_and_Time, Temperature])
+    if len(allTemperatures) == 10:
+        dbObj.add_del_update_db_record(allTemperatures, "Temperature")
+        allTemperatures.clear()
+        del dbObj
+        print("Inserted Temperature Data into Database.")
+        print("")
 
-
+allHumidity = []
 # Function to save Humidity to DB Table
 def DHT22_Humidity_Data_Handler(jsonData):
     # Parse Data
@@ -69,10 +73,13 @@ def DHT22_Humidity_Data_Handler(jsonData):
 
     # Push into DB Table
     dbObj = DatabaseManager()
-    dbObj.add_del_update_db_record([SensorID, Data_and_Time, Humidity], "Humidity")
-    del dbObj
-    print("Inserted Humidity Data into Database.")
-    print("")
+    allHumidity.append([SensorID, Data_and_Time, Humidity])
+    if len(allHumidity) == 10:
+        dbObj.add_del_update_db_record(allHumidity, "Humidity")
+        allHumidity.clear()
+        del dbObj
+        print("Inserted Humidity Data into Database.")
+        print("")
 
 
 # ===============================================================
