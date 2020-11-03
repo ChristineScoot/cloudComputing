@@ -1,17 +1,17 @@
-import paho.mqtt.client as mqtt
-import random, threading, json
+import json
+import random
+import threading
 from datetime import datetime
 
-# ====================================================
-# MQTT Settings 
+import paho.mqtt.client as mqtt
+
+# MQTT Settings
 MQTT_Broker = "test.mosquitto.org"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 MQTT_Topic_Humidity = "cloud2020/gr04-3/Humidity"
 MQTT_Topic_Temperature = "cloud2020/gr04-3/Temperature"
 
-
-# ====================================================
 
 def on_connect(client, userdata, rc):
     if rc != 0:
@@ -43,8 +43,7 @@ def publish_To_Topic(topic, message):
     print("")
 
 
-# ====================================================
-# FAKE SENSOR 
+# FAKE SENSOR
 # Dummy code used as Fake Sensor to publish some random values
 # to MQTT Broker
 
@@ -82,5 +81,3 @@ def publish_Fake_Sensor_Values_to_MQTT():
 
 
 publish_Fake_Sensor_Values_to_MQTT()
-
-# ====================================================
