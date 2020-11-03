@@ -11,13 +11,7 @@ class DatabaseManager():
 
     def add_del_update_db_record(self, args=[], name=""):
         col = self.db.data
-        for i in args:
-            col.insert(
-                {
-                    'value': i,
-                    'name': name,
-                }
-            )
+        col.insert_many([{'value': i, 'name': name} for i in args])
         return
 
 
