@@ -6,11 +6,14 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 
 # MQTT Settings
+from near_location import near_location
+
 MQTT_Broker = "test.mosquitto.org"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 MQTT_Topic_Humidity = "cloud2020/gr04-3/Humidity"
 MQTT_Topic_Temperature = "cloud2020/gr04-3/Temperature"
+MQTT_Topic_Pollution = "cloud2020/gr04-3/Pollution"
 
 
 def on_connect(client, userdata, rc):
@@ -57,26 +60,40 @@ def publish_Fake_Sensor_Values_to_MQTT():
         Humidity_Fake_Value = float("{0:.2f}".format(random.uniform(50, 100)))
 
         Humidity_Data = {}
-        Humidity_Data['Sensor_ID'] = "Dummy-1"
+        Humidity_Data['Sensor_ID'] = "s1"
         Humidity_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
         Humidity_Data['Humidity'] = Humidity_Fake_Value
+        Humidity_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
         humidity_json_data = json.dumps(Humidity_Data)
 
         print("Publishing fake Humidity Value: " + str(Humidity_Fake_Value) + "...")
         publish_To_Topic(MQTT_Topic_Humidity, humidity_json_data)
         toggle = 1
 
-    else:
-        Temperature_Fake_Value = float("{0:.2f}".format(random.uniform(1, 30)))
+    elif toggle == 1:
+        Temperature_Fake_Value = float("{0:.2f}".format(random.uniform(-20, 30)))
 
         Temperature_Data = {}
-        Temperature_Data['Sensor_ID'] = "Dummy-2"
+        Temperature_Data['Sensor_ID'] = "s2"
         Temperature_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
         Temperature_Data['Temperature'] = Temperature_Fake_Value
+        Temperature_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
         temperature_json_data = json.dumps(Temperature_Data)
 
         print("Publishing fake Temperature Value: " + str(Temperature_Fake_Value) + "...")
         publish_To_Topic(MQTT_Topic_Temperature, temperature_json_data)
+        toggle = 2
+    else:
+        Pollution_Fake_Value = float("{0:.2f}".format(random.uniform(1, 100)))
+        Pollution_Data = {}
+        Pollution_Data['Sensor_ID'] = "s3"
+        Pollution_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
+        Pollution_Data['Pollution'] = Pollution_Fake_Value
+        Pollution_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
+        pollution_json_data = json.dumps(Pollution_Data)
+
+        print("Publishing fake Pollution Value: " + str(Pollution_Fake_Value) + "...")
+        publish_To_Topic(MQTT_Topic_Pollution, pollution_json_data)
         toggle = 0
 
 
