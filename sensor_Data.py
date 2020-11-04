@@ -32,7 +32,7 @@ def DHT22_Temp_Data_Handler(jsonData):
 
     dbObj = DatabaseManager()
     allTemperatures.append([SensorID, Data_and_Time, Temperature, Location])
-    if len(allTemperatures) == 2:
+    if len(allTemperatures) == 10:
         dbObj.add_del_update_db_record(allTemperatures, "Temperature")
         allTemperatures.clear()
         del dbObj
@@ -55,7 +55,7 @@ def DHT22_Humidity_Data_Handler(jsonData):
 
     dbObj = DatabaseManager()
     allHumidity.append([SensorID, Data_and_Time, Humidity, Location])
-    if len(allHumidity) == 2:
+    if len(allHumidity) == 10:
         dbObj.add_del_update_db_record(allHumidity, "Humidity")
         allHumidity.clear()
         del dbObj
@@ -78,7 +78,7 @@ def DHT22_Pollution_Data_Handler(jsonData):
 
     dbObj = DatabaseManager()
     allPollutions.append([SensorID, Data_and_Time, Pollution, Location])
-    if len(allPollutions) == 2:
+    if len(allPollutions) == 10:
         dbObj.add_del_update_db_record(allPollutions, "Pollution")
         allPollutions.clear()
         del dbObj
