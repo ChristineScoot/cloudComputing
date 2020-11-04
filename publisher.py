@@ -1,5 +1,6 @@
 import json
 import random
+import sys
 import threading
 from datetime import datetime
 
@@ -60,7 +61,7 @@ def publish_Fake_Sensor_Values_to_MQTT():
         Humidity_Fake_Value = float("{0:.2f}".format(random.uniform(50, 100)))
 
         Humidity_Data = {}
-        Humidity_Data['Sensor_ID'] = "s1"
+        Humidity_Data['Sensor_ID'] = sys.argv[1]
         Humidity_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
         Humidity_Data['Humidity'] = Humidity_Fake_Value
         Humidity_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
@@ -74,7 +75,7 @@ def publish_Fake_Sensor_Values_to_MQTT():
         Temperature_Fake_Value = float("{0:.2f}".format(random.uniform(-20, 30)))
 
         Temperature_Data = {}
-        Temperature_Data['Sensor_ID'] = "s2"
+        Temperature_Data['Sensor_ID'] = sys.argv[1]
         Temperature_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
         Temperature_Data['Temperature'] = Temperature_Fake_Value
         Temperature_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
@@ -86,7 +87,7 @@ def publish_Fake_Sensor_Values_to_MQTT():
     else:
         Pollution_Fake_Value = float("{0:.2f}".format(random.uniform(1, 100)))
         Pollution_Data = {}
-        Pollution_Data['Sensor_ID'] = "s3"
+        Pollution_Data['Sensor_ID'] = sys.argv[1]
         Pollution_Data['Date'] = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
         Pollution_Data['Pollution'] = Pollution_Fake_Value
         Pollution_Data['Location'] = near_location(50.0646501, 19.9449799, 50)
