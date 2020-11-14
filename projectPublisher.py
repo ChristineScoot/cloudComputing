@@ -57,7 +57,7 @@ def publish_random_sensor_values_to_mqtt():
     threading.Timer(3.0, publish_random_sensor_values_to_mqtt).start()
 
     date = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
-    location = near_location(50.0646501, 19.9449799, 50)
+    location = near_location(50.0646501, 19.9449799, 500)
 
     data = {"Image": image_path, "Sensor_ID": "1", "Date": date, "Location": location}
     publish_to_topic(MQTT_Topic_Traffic, json.JSONEncoder().encode(data))
