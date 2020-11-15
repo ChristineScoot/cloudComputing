@@ -54,7 +54,7 @@ def publish_random_sensor_values_to_mqtt():
 
     threading.Timer(3.0, publish_random_sensor_values_to_mqtt).start()
 
-    date = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
+    date = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S")
     # location = near_location(50.0646501, 19.9449799, 500)
     locations = [[50.06458920751176, 19.94521232796986],
                  [50.062331900722626, 19.941672997556896],
