@@ -6,8 +6,6 @@ from datetime import datetime
 
 import paho.mqtt.client as mqtt
 
-from near_location import near_location
-
 # MQTT Settings
 
 MQTT_Broker = "test.mosquitto.org"
@@ -47,7 +45,7 @@ def publish_to_topic(topic, message):
 
 
 def publish_random_sensor_values_to_mqtt():
-    num_images = 17
+    num_images = 12
     image_number = random.randrange(1, num_images)
 
     images_directory = "./frames"
@@ -57,7 +55,16 @@ def publish_random_sensor_values_to_mqtt():
     threading.Timer(3.0, publish_random_sensor_values_to_mqtt).start()
 
     date = (datetime.today()).strftime("%d-%b-%Y %H:%M:%S:%f")
-    location = near_location(50.0646501, 19.9449799, 500)
+    # location = near_location(50.0646501, 19.9449799, 500)
+    locations = [[50.06458920751176, 19.94521232796986],
+                 [50.062331900722626, 19.941672997556896],
+                 [50.06531621494584, 19.94691840311032],
+                 [50.067899497949895, 19.943737310452978],
+                 [50.06182888519117, 19.942573341602063],
+                 [50.06171616360789, 19.944906618659157],
+                 [50.064723729369675, 19.944031683425237],
+                 [50.063002019715256, 19.94818279057535]]
+    location = locations[random.randrange(0, 7)]
 
     data = {"Image": image_path, "Sensor_ID": "1", "Date": date, "Location": location}
     publish_to_topic(MQTT_Topic_Traffic, json.JSONEncoder().encode(data))

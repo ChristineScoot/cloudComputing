@@ -3,6 +3,7 @@ import json
 import cv2
 import numpy as np
 import pymongo
+from pymongo import UpdateOne
 
 
 class DatabaseManager():
@@ -11,9 +12,14 @@ class DatabaseManager():
             "mongodb://user1:user1@cluster0-shard-00-00.f93zw.mongodb.net:27017,cluster0-shard-00-01.f93zw.mongodb.net:27017,cluster0-shard-00-02.f93zw.mongodb.net:27017/cloud?ssl=true&replicaSet=atlas-z3y6rw-shard-0&authSource=admin&retryWrites=true&w=majority")
         self.db = client.test
 
-    def add_del_update_db_record(self, args=[], name=""):
+    def add_del_update_db_record(self, args=[]):
         col = self.db.traffic
-        col.insert_many([{'value': i, 'name': name} for i in args])
+        operations = []
+        for i in args:
+            loc = i["location"]
+            del i["location"]
+            operations.append(UpdateOne({'location': loc}, {"$push": {"value": i}}, True))
+        col.bulk_write(operations)
         return
 
 
@@ -46,7 +52,6 @@ def detect(file):
     maskr = cv2.add(mask1, mask2)
 
     size = img.shape
-    # print size
 
     # hough circle detect
     r_circles = cv2.HoughCircles(maskr, cv2.HOUGH_GRADIENT, 1, 80,
@@ -122,7 +127,7 @@ def DHT22_Image_Handler(json_data):
     # Parse Data
     json_data = json_data.decode('utf-8')
     json_dict = json.loads(json_data)
-    sensor_id = json_dict['Sensor_ID']
+    # sensor_id = json_dict['Sensor_ID']
     data_and_time = json_dict['Date']
     image_path = json_dict['Image']
     location = json_dict['Location']
@@ -133,7 +138,7 @@ def DHT22_Image_Handler(json_data):
     if light_color is not None:
         dbObj = DatabaseManager()
         allImages.append(
-            {"sensor_id": sensor_id, "date": data_and_time, "location": location, "light_color": light_color})
+            {"date": data_and_time, "light_color": light_color, "location": location})
         if len(allImages) == 10:
             dbObj.add_del_update_db_record(allImages)
             allImages.clear()
